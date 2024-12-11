@@ -35,3 +35,4 @@ class AddEditCoffeeForm(QDialog):
             self.close()
         else:
             QMessageBox.warning(self, "Ошибка", "Пожалуйста, заполните все поля.")
+pyuic5 addEditCoffeeForm.ui -o addEditCoffeeForm.py
