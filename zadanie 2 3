@@ -1,37 +1,38 @@
 import sys
 import random
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtWidgets, uic, QtGui
 
-class CircleApp(QtWidgets.QWidget):
+class CircleApp(QtWidgets.QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.initUI()
+        super(CircleApp, self).__init__()
+        uic.loadUi('UI.ui', self)
 
-    def initUI(self):
-        self.setGeometry(100, 100, 800, 600)
-        self.setWindowTitle('Zadanie2-3')
+        self.pushButton.clicked.connect(self.add_circle)
 
-        self.button = QtWidgets.QPushButton('Нажми на меня!', self)
-        self.button.clicked.connect(self.draw_circle)
-        self.button.resize(100, 30)
-        self.button.move(350, 10)
+        self.canvas = QtWidgets.QLabel(self)
+        self.canvas.setGeometry(5, 5, 550, 700)  # Устанавливаем размер области
+        self.canvas.setStyleSheet("background-color: white;")
+        self.canvas.setPixmap(QtGui.QPixmap(self.canvas.size()))
+        self.canvas.pixmap().fill(QtGui.QColor("orange"))
 
-        self.setStyleSheet("background-color: White;")
-        self.show()
+    def add_circle(self):
 
-    def draw_circle(self):
-        self.update()
+        width = self.canvas.width()
+        height = self.canvas.height()
 
-    def paintEvent(self, event):
-        painter = QtGui.QPainter(self)
         diameter = random.randint(20, 100)
-        color = QtGui.QColor(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
-        painter.setBrush(color)
-        x = random.randint(0, self.width() - diameter)
-        y = random.randint(0, self.height() - diameter)
+        x = random.randint(0, width - diameter)
+        y = random.randint(0, height - diameter)
+
+        painter = QtGui.QPainter(self.canvas.pixmap())
+        painter.setBrush(QtGui.QColor("yellow"))
         painter.drawEllipse(x, y, diameter, diameter)
+        painter.end()
+
+        self.canvas.update()
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    ex = CircleApp()
+    window = CircleApp()
+    window.show()
     sys.exit(app.exec_())
